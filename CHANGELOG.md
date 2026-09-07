@@ -12,7 +12,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 
--
+- Corrected `DataQualityResult` field descriptions so rule reconstruction metadata is
+  documented on `rule_data` rather than `rule_description`.
+  (https://github.com/gchq/gchq-data-quality/issues/34)
 
 ### Changed
 

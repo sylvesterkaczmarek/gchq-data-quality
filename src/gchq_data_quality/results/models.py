@@ -134,12 +134,11 @@ class DataQualityResult(DataQualityBaseModel):
     )
     rule_description: Any = Field(
         default=None,
-        description="Text, dict, or JSON string capturing rule logic or parameters used. If left blank, "
-        "all rule metadata will be JSON dumped into the field, allowing the rule to be reconstructed with "
-        "config = DataQualityConfig.from_report(my_data_quality_report)",
+        description="Description of the rule.",
     )
     rule_data: str = Field(
-        description="A JSON dump of the rule information, such that it can be recreated"
+        description="A JSON dump of all rule metadata, allowing the rule to be reconstructed with "
+        "config = DataQualityConfig.from_report(my_data_quality_report)."
     )
     records_failed_ids: list | None = Field(
         default=None,
