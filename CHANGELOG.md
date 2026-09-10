@@ -12,7 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 
--
+- Preserve nested failed-record samples during JSON export and normalize missing
+  scalar values without mutating the stored samples. (#44)
 
 ### Changed
 

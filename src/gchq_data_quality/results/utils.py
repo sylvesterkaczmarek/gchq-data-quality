@@ -12,6 +12,7 @@ Note:
     the models and configuration classes that orchestrate data quality evaluation.
 """
 
+import numpy as np
 import pandas as pd
 
 from gchq_data_quality.globals import SampleConfig
@@ -27,15 +28,27 @@ def coerce_nan_to_none(records_failed_sample: list[dict]) -> list[dict]:
         records_failed_sample (list[dict]): The records_failed_sample value from within a DataQualityResult
 
     Returns:
-        list[dict]: A modified records_failed_sample list with any value that is pd.isna() coerced to None
+        list[dict]: Copies of the samples with missing scalars replaced by None,
+            including values inside dictionaries, lists, tuples and NumPy arrays.
     """
 
-    for _dict in records_failed_sample:
-        for key, value in _dict.items():
-            if pd.isna(value):
-                _dict[key] = None
+    return [
+        {key: _coerce_missing_value(value) for key, value in row.items()}
+        for row in records_failed_sample
+    ]
 
-    return records_failed_sample
+
+def _coerce_missing_value(value: object) -> object:
+    """Copy nested sample values, replacing missing scalars with None."""
+    if isinstance(value, dict):
+        return {key: _coerce_missing_value(item) for key, item in value.items()}
+    if isinstance(value, np.ndarray):
+        return _coerce_missing_value(value.tolist())
+    if isinstance(value, list | tuple):
+        return [_coerce_missing_value(item) for item in value]
+    if pd.api.types.is_scalar(value) and pd.isna(value):
+        return None
+    return value
 
 
 def _dedupe_and_drop_na(series: pd.Series) -> pd.Series:
