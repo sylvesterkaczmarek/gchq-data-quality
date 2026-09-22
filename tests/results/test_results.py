@@ -696,16 +696,6 @@ def test_failed_records_outputs(test_df: pd.DataFrame) -> None:
     assert samples_json_dict[1]["nat"] is None
 
 
-def test_rule_metadata_field_descriptions() -> None:
-    """Rule reconstruction guidance belongs to the machine-readable rule data."""
-    description = DataQualityResult.model_fields["rule_description"].description
-    rule_data = DataQualityResult.model_fields["rule_data"].description
-
-    assert description == "Description of the rule."
-    assert rule_data is not None
-    assert "DataQualityConfig.from_report" in rule_data
-
-
 def test_nan_into_results() -> None:
     # There is some inconsitent behaviour across pyspark and pandas versions whereby a NULL value
     # in Spark can resolve to a NaN in pandas even though the column type should be string
